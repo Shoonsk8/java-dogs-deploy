@@ -1,17 +1,32 @@
 package com.lambdaschool.dogsinitial;
 
+import com.lambdaschool.dogsinitial.model.DogList;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+@EnableScheduling
+@EnableWebMvc
 @SpringBootApplication
 public class DogsinitialApplication
 {
+    public static final String EXCHANGE_NAME = "LambdaServer";
+    public static final String QUEUE_NAME_LOW = "LowPriorityQueue";
+    public static final String QUEUE_NAME_HIGH = "HighPriorityQueue";
 
-    static DogList ourDogList;
+    public static DogList ourDogList;
     public static void main(String[] args)
     {
         ourDogList = new DogList();
-        SpringApplication.run(DogsinitialApplication.class, args);
+        ApplicationContext ctx =SpringApplication.run(DogsinitialApplication.class, args);
+
+        DispatcherServlet dispatcherServlet = (DispatcherServlet)ctx.getBean("dispatcherServlet");
+        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
     }
 
 }
